@@ -1,0 +1,67 @@
+package store
+
+import (
+	"context"
+	"database/sql"
+)
+
+type Invoice struct {
+	ID             int64  `json:"id"`
+	Payment_id     int64  `json:"payment_id"`
+	Invoice_number string `json:"invoice_number"`
+	Issue_at       string `json:"issue_at"`
+	Due_date       string `json:"due_date"`
+	Status         string `json:"status"`
+}
+
+type InvoiceStore struct {
+	db *sql.DB
+}
+
+func (s *InvoiceStore) Create(ctx context.Context, invoice *Invoice) error {
+	query := `INSERT INTO invoice (payment_id, invoice_number, issue_at, due_date, status)
+	VALUES ($1, $2, $3, $4, $5)
+	`
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status).Scan()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *InvoiceStore) UpdateByInvoiceNumber(ctx context.Context, invoice *Invoice) error {
+	query := `UPDATE invoice SET payment_id = $1, invoice_number = $2, issue_at = $3, due_date = $4, status = $5 WHERE invoice_number = $6`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status, invoice.Invoice_number).Scan()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (s *InvoiceStore) GetByInvoiceNumber(ctx context.Context, invoiceNumber string) (*Invoice, error) {
+	query := `SELECT id, payment_id, invoice_number, issue_at, due_date, status FROM invoice WHERE invoice_number = $1 `
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	invoice := &Invoice{}
+
+	err := s.db.QueryRowContext(ctx, query, invoiceNumber).Scan(
+		&invoice.ID, &invoice.Payment_id, &invoice.Issue_at, &invoice.Due_date, &invoice.Status,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, ErrNotFound
+		}
+		return nil, err
+	}
+
+	return invoice, nil
+}
