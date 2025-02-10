@@ -89,9 +89,18 @@ func (s *CommentStore) DeleteByID(ctx context.Context, commentID int64) error {
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, commentID).Scan()
+	res, err := s.db.ExecContext(ctx, query, commentID)
+	if err != nil {
+		return nil
+	}
+
+	rows, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
 	}
 
 	return nil
@@ -103,9 +112,18 @@ func (s *CommentStore) DeleteByTripID(ctx context.Context, tripID int64) error {
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, tripID).Scan()
+	res, err := s.db.ExecContext(ctx, query, tripID)
+	if err != nil {
+		return nil
+	}
+
+	rows, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
 	}
 
 	return nil

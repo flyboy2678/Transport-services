@@ -97,12 +97,18 @@ func (s *PhotoStore) DeleteByID(ctx context.Context, id int64) error {
 func (s *PhotoStore) DeleteByTripID(ctx context.Context, tripID int64) error {
 	query := `DELETE FROM photo WHERE trip_id = $1`
 
-	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
-	defer cancel()
+	res, err := s.db.ExecContext(ctx, query, tripID)
+	if err != nil {
+		return nil
+	}
 
-	err := s.db.QueryRowContext(ctx, query, tripID).Scan()
+	rows, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
 	}
 
 	return nil

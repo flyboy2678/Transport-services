@@ -36,9 +36,18 @@ func (s *SubscriptionStore) DeleteByEmail(ctx context.Context, email string) err
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, email).Scan()
+	res, err := s.db.ExecContext(ctx, query, email)
+	if err != nil {
+		return nil
+	}
+
+	rows, err := res.RowsAffected()
 	if err != nil {
 		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
 	}
 
 	return nil
