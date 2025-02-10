@@ -19,6 +19,7 @@ type Storage struct {
 		GetByID(context.Context, int64) (*User, error)
 		GetByEmail(context.Context, string) (*User, error)
 		UpdateByID(context.Context, *User) error
+		DeleteByID(context.Context, int64) error
 	}
 	Trips interface {
 		Create(context.Context, *Trip) error

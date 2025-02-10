@@ -24,8 +24,8 @@ type UserStore struct {
 
 func (s *UserStore) Create(ctx context.Context, user *User) error {
 	query := `
-	INSERT INTO user (email, password, first_name, last_name, phone)
-	VALUES ($1, $2, $3, $4) RETURNING id, created_at
+	INSERT INTO "user" (email, password, first_name, last_name, phone)
+	VALUES ($1, $2, $3, $4, $5) RETURNING id, created_at
 	`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
@@ -54,7 +54,7 @@ func (s *UserStore) Create(ctx context.Context, user *User) error {
 }
 
 func (s *UserStore) GetByID(ctx context.Context, userID int64) (*User, error) {
-	query := `SELECT id, email, password, first_name, last_name, phone, created_at FROM user WHERE id = $1`
+	query := `SELECT id, email, password, first_name, last_name, phone, created_at FROM "user" WHERE id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -84,7 +84,7 @@ func (s *UserStore) GetByID(ctx context.Context, userID int64) (*User, error) {
 }
 
 func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error) {
-	query := `SELECT id, email, first_name, last_name, password, phone, created_at WHERE email = $1`
+	query := `SELECT id, email, first_name, last_name, password, phone, created_at FROM "user" WHERE email = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -113,7 +113,7 @@ func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error)
 }
 
 func (s *UserStore) UpdateByID(ctx context.Context, user *User) error {
-	query := `UPDATE user SET email = $1, phone = $2 WHERE id = $3`
+	query := `UPDATE "user" SET email = $1, phone = $2 WHERE id = $3`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -128,4 +128,27 @@ func (s *UserStore) UpdateByID(ctx context.Context, user *User) error {
 
 	return nil
 
+}
+
+func (s *UserStore) DeleteByID(ctx context.Context, userID int64) error {
+	query := `DELETE FROM "user" WHERE id = $1`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	res, err := s.db.ExecContext(ctx, query, userID)
+	if err != nil {
+		return nil
+	}
+
+	rows, err := res.RowsAffected()
+	if err != nil {
+		return err
+	}
+
+	if rows == 0 {
+		return ErrNotFound
+	}
+
+	return nil
 }

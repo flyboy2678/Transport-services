@@ -1,0 +1,159 @@
+basePath: /v1
+definitions:
+  main.CreateUserPayload:
+    properties:
+      email:
+        maxLength: 255
+        type: string
+      first_name:
+        maxLength: 100
+        type: string
+      last_name:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 24
+        minLength: 8
+        type: string
+      phone:
+        maxLength: 255
+        type: string
+    required:
+    - email
+    - first_name
+    - last_name
+    - password
+    - phone
+    type: object
+  store.User:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      first_name:
+        type: string
+      id:
+        type: integer
+      last_name:
+        type: string
+      phone:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Transport Service Api
+  version: "1.0"
+paths:
+  /users:
+    post:
+      consumes:
+      - application/json
+      description: Creates a user
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateUserPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.User'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a user
+      tags:
+      - users
+  /users/email/{email}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a user by id
+      parameters:
+      - description: User email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.User'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a user
+      tags:
+      - users
+  /users/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a user by id
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a user
+      tags:
+      - users
+    get:
+      consumes:
+      - application/json
+      description: Fetches a user by id
+      parameters:
+      - description: User id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.User'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a user
+      tags:
+      - users
+swagger: "2.0"
