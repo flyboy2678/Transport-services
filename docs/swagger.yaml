@@ -1,5 +1,36 @@
 basePath: /v1
 definitions:
+  main.CreateTripPayload:
+    properties:
+      available_seats:
+        type: integer
+      description:
+        maxLength: 255
+        type: string
+      end_date:
+        type: string
+      location:
+        maxLength: 100
+        type: string
+      name:
+        maxLength: 100
+        type: string
+      price:
+        type: number
+      seats:
+        type: integer
+      start_date:
+        type: string
+    required:
+    - available_seats
+    - description
+    - end_date
+    - location
+    - name
+    - price
+    - seats
+    - start_date
+    type: object
   main.CreateUserPayload:
     properties:
       email:
@@ -25,6 +56,29 @@ definitions:
     - password
     - phone
     type: object
+  store.Trip:
+    properties:
+      available_seats:
+        type: integer
+      created_at:
+        type: string
+      description:
+        type: string
+      end_date:
+        type: string
+      id:
+        type: integer
+      location:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      seats:
+        type: integer
+      start_date:
+        type: string
+    type: object
   store.User:
     properties:
       created_at:
@@ -45,6 +99,126 @@ info:
   title: Transport Service Api
   version: "1.0"
 paths:
+  /trips:
+    get:
+      consumes:
+      - application/json
+      description: Fetches all trips
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Trip'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches all trips
+      tags:
+      - trips
+    post:
+      consumes:
+      - application/json
+      description: Creates a trip
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateTripPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Trip'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a trip
+      tags:
+      - trips
+  /trips/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a trip by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Trip'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a trip by id
+      tags:
+      - trips
+  /trips/location/{location}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a trip by location
+      parameters:
+      - description: Trip Location
+        in: path
+        name: location
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Trip'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a trip by location
+      tags:
+      - trips
+  /trips/upcoming:
+    get:
+      consumes:
+      - application/json
+      description: Fetches all upcoming trips
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Trip'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches all upcoming trips
+      tags:
+      - trips
   /users:
     post:
       consumes:

@@ -14,7 +14,7 @@ type Trip struct {
 	End_date        string  `json:"end_date"`
 	Price           float64 `json:"price"`
 	Seats           int     `json:"seats"`
-	Availabel_seats int     `json:"availalbe_seats"`
+	Available_seats int     `json:"available_seats"`
 	Created_at      string  `json:"created_at"`
 }
 
@@ -24,7 +24,7 @@ type TripStore struct {
 
 func (s *TripStore) Create(ctx context.Context, trip *Trip) error {
 	query := `INSERT INTO trip (name, description, location, start_date, end_date, price, seats, available_seats)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id, created_at`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -39,8 +39,11 @@ func (s *TripStore) Create(ctx context.Context, trip *Trip) error {
 		trip.End_date,
 		trip.Price,
 		trip.Seats,
-		trip.Availabel_seats,
-	).Scan()
+		trip.Available_seats,
+	).Scan(
+		&trip.ID,
+		&trip.Created_at,
+	)
 	if err != nil {
 		return err
 	}
@@ -67,7 +70,7 @@ func (s *TripStore) GetByID(ctx context.Context, tripID int64) (*Trip, error) {
 		&trip.End_date,
 		&trip.Price,
 		&trip.Seats,
-		&trip.Availabel_seats,
+		&trip.Available_seats,
 		&trip.Created_at,
 	)
 	if err != nil {
@@ -104,7 +107,7 @@ func (s *TripStore) GetByLocation(ctx context.Context, location string) ([]Trip,
 			&trip.End_date,
 			&trip.Price,
 			&trip.Seats,
-			&trip.Availabel_seats,
+			&trip.Available_seats,
 			&trip.Created_at,
 		); err != nil {
 			return nil, err
@@ -119,7 +122,7 @@ func (s *TripStore) GetByLocation(ctx context.Context, location string) ([]Trip,
 func (s *TripStore) GetUpcoming(ctx context.Context) ([]Trip, error) {
 	query := `SELECT id, name, description, location, start_date, end_date, price, seats, available_seats, created_at
 	FROM trip
-	WHERE start_date > NOW()
+	WHERE start_date >= CURRENT_DATE
 	ORDER BY start_date ASC
 	`
 
@@ -144,7 +147,7 @@ func (s *TripStore) GetUpcoming(ctx context.Context) ([]Trip, error) {
 			&trip.End_date,
 			&trip.Price,
 			&trip.Seats,
-			&trip.Availabel_seats,
+			&trip.Available_seats,
 			&trip.Created_at,
 		); err != nil {
 			return nil, err
@@ -183,7 +186,7 @@ func (s *TripStore) GetAll(ctx context.Context) ([]Trip, error) {
 			&trip.End_date,
 			&trip.Price,
 			&trip.Seats,
-			&trip.Availabel_seats,
+			&trip.Available_seats,
 			&trip.Created_at,
 		); err != nil {
 			return nil, err
@@ -204,7 +207,7 @@ func (s *TripStore) UpdateByID(ctx context.Context, trip *Trip) error {
 	defer cancel()
 
 	err := s.db.QueryRowContext(
-		ctx, query, trip.Name, trip.Decription, trip.Location, trip.Start_date, trip.End_date, trip.Price, trip.Seats, trip.Availabel_seats, trip.ID,
+		ctx, query, trip.Name, trip.Decription, trip.Location, trip.Start_date, trip.End_date, trip.Price, trip.Seats, trip.Available_seats, trip.ID,
 	).Scan()
 
 	if err != nil {

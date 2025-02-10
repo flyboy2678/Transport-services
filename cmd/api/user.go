@@ -9,10 +9,6 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type userKey string
-
-const userCtx userKey = "user"
-
 type CreateUserPayload struct {
 	First_name string `json:"first_name" validate:"required,max=100"`
 	Last_name  string `json:"last_name" validate:"required,max=100"`

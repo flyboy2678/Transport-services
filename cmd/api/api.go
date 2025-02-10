@@ -64,6 +64,19 @@ func (app *application) mount() http.Handler {
 			})
 		})
 		//trips
+		r.Route("/trips", func(r chi.Router) {
+			r.Post("/", app.createTripHandler)
+			r.Get("/", app.getAllTripsHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getTripByIdHandler)
+			})
+			r.Route("/location/{location}", func(r chi.Router) {
+				r.Get("/", app.getTripsByLocationHandler)
+			})
+			r.Route("/upcoming", func(r chi.Router) {
+				r.Get("/", app.getUpcomingTripsHandler)
+			})
+		})
 	})
 
 	router.Get("/health", app.healthCheckHandler)
