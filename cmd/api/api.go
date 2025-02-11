@@ -77,6 +77,17 @@ func (app *application) mount() http.Handler {
 				r.Get("/", app.getUpcomingTripsHandler)
 			})
 		})
+		//subscriptions
+		r.Route("/subscriptions", func(r chi.Router) {
+			r.Post("/", app.createSubHandler)
+			r.Get("/", app.getAllSubsHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Delete("/", app.deleteSubByUserIdHandler)
+			})
+			r.Route("/email/{email}", func(r chi.Router) {
+				r.Delete("/", app.deleteSubByEmailHandler)
+			})
+		})
 	})
 
 	router.Get("/health", app.healthCheckHandler)

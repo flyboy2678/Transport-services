@@ -23,3 +23,7 @@ migrate-version:
 .PHONY: migrate-force
 migrate-force:
 	@migrate -path=$(MIGRATIONS_PATH) -database=$(DB_ADDR) force $(filter-out $@,$(MAKECMDGOALS))
+
+.PHONY: docs
+docs:
+	@swag init -g cmd/api/main.go

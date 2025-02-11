@@ -42,7 +42,9 @@ type Storage struct {
 	}
 	Subscriptions interface {
 		Create(context.Context, *Subscription) error
+		GetAll(context.Context) ([]Subscription, error)
 		DeleteByEmail(context.Context, string) error
+		DeleteByUserID(context.Context, int64) error
 	}
 	Invoices interface {
 		Create(context.Context, *Invoice) error
