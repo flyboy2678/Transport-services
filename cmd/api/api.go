@@ -132,8 +132,19 @@ func (app *application) mount() http.Handler {
 				r.Delete("/", app.DeletePhotosByTripHandler)
 			})
 		})
+		//comments
+		r.Route("/comments", func(r chi.Router) {
+			r.Get("/", app.createCommentHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getCommentByIdHandler)
+				r.Delete("/", app.deleteCommentByIdHandler)
+			})
+			r.Route("/tripId/{id}", func(r chi.Router) {
+				r.Get("/", app.getCommentsByTripIdHandler)
+				r.Delete("/", app.deleteCommentByTripIdHandler)
+			})
+		})
 	})
-
 	router.Get("/health", app.healthCheckHandler)
 
 	return router

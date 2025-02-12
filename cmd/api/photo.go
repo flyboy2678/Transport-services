@@ -167,8 +167,8 @@ func (app *application) DeletePhotoByIdHandler(w http.ResponseWriter, r *http.Re
 //
 //	@Success		204	{object} string
 //	@Failure		404	{object}	error
-//	@Failure		500	{object}	error
 //	@Router			/photos/tripId/{id} [delete]
+//	@Failure		500	{object}	error
 func (app *application) DeletePhotosByTripHandler(w http.ResponseWriter, r *http.Request) {
 	tripId, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
