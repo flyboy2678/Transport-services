@@ -37,7 +37,7 @@ func (s *CommentStore) Create(ctx context.Context, comment *Comment) error {
 }
 
 func (s *CommentStore) GetByID(ctx context.Context, commentID int64) (*Comment, error) {
-	query := `SELECT id, user_id, trip_id, comment, rating FROM comment WHERE id = $1`
+	query := `SELECT id, user_id, trip_id, comment, rating, created_at FROM comment WHERE id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -59,7 +59,7 @@ func (s *CommentStore) GetByID(ctx context.Context, commentID int64) (*Comment, 
 }
 
 func (s *CommentStore) GetByTripID(ctx context.Context, tripID int64) ([]Comment, error) {
-	query := `SELECT id, user_id, trip_id, comment, rating FROM comment WHERE trip_id = $1`
+	query := `SELECT id, user_id, trip_id, comment, rating, created_at FROM comment WHERE trip_id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()

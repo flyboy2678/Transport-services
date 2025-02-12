@@ -134,7 +134,7 @@ func (app *application) mount() http.Handler {
 		})
 		//comments
 		r.Route("/comments", func(r chi.Router) {
-			r.Get("/", app.createCommentHandler)
+			r.Post("/", app.createCommentHandler)
 			r.Route("/id/{id}", func(r chi.Router) {
 				r.Get("/", app.getCommentByIdHandler)
 				r.Delete("/", app.deleteCommentByIdHandler)

@@ -116,7 +116,7 @@ func (app *application) getBookingsByTripIdHandler(w http.ResponseWriter, r *htt
 
 	ctx := r.Context()
 
-	bookings, err := app.store.Bookings.GetByID(ctx, tripId)
+	bookings, err := app.store.Bookings.GetByTripID(ctx, tripId)
 	if err != nil {
 		app.internalServerError(w, r, err)
 		return
