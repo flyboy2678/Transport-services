@@ -9,6 +9,22 @@ definitions:
       user_id:
         type: integer
     type: object
+  main.CreateCommentPayload:
+    properties:
+      comment:
+        type: string
+      rating:
+        type: integer
+      trip_id:
+        type: integer
+      user_id:
+        type: integer
+    required:
+    - comment
+    - rating
+    - trip_id
+    - user_id
+    type: object
   main.CreateInvoicePayload:
     properties:
       due_date:
@@ -158,6 +174,21 @@ definitions:
         type: integer
       status:
         type: string
+      trip_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  store.Comment:
+    properties:
+      comment:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      rating:
+        type: integer
       trip_id:
         type: integer
       user_id:
@@ -410,6 +441,143 @@ paths:
       summary: Fetches bookings
       tags:
       - bookings
+  /comments:
+    post:
+      consumes:
+      - application/json
+      description: Creates a comment
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateCommentPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Comment'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a comment
+      tags:
+      - comments
+  /comments/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a comment by id
+      parameters:
+      - description: Comment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a comment
+      tags:
+      - comments
+    get:
+      consumes:
+      - application/json
+      description: Fetches comments by id
+      parameters:
+      - description: comment id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Comment'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches comments by id
+      tags:
+      - comments
+  /comments/tripId/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes comments by a trip id
+      parameters:
+      - description: trip ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes comments
+      tags:
+      - comments
+    get:
+      consumes:
+      - application/json
+      description: Fetches comments by a trip id
+      parameters:
+      - description: Trip id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Comment'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches comments by a trip id
+      tags:
+      - comments
   /invoice:
     post:
       consumes:
