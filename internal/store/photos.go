@@ -17,7 +17,9 @@ type PhotoStore struct {
 }
 
 func (s *PhotoStore) Create(ctx context.Context, photo *Photo) error {
-	query := `INSERT INTO photo (trip_id, photo_url) VALUES ($1, $2)`
+	query := `INSERT INTO photo (trip_id, photo_url) 
+	VALUES ($1, $2)
+	RETURNING id, uploaded_at`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
@@ -26,7 +28,7 @@ func (s *PhotoStore) Create(ctx context.Context, photo *Photo) error {
 		ctx,
 		query,
 		photo.Trip_id,
-		photo.Photo_url).Scan()
+		photo.Photo_url).Scan(&photo.ID, &photo.Uploaded_at)
 	if err != nil {
 		return err
 	}

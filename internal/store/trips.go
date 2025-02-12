@@ -201,14 +201,15 @@ func (s *TripStore) GetAll(ctx context.Context) ([]Trip, error) {
 
 func (s *TripStore) UpdateByID(ctx context.Context, trip *Trip) error {
 	query := `UPDATE trip SET name = $1, description = $2, location = $3, start_date = $4, end_date = $5, price = $6, seats = $7, available_seats = $8
-		WHERE id = $9`
+		WHERE id = $9
+		RETURING id`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx, query, trip.Name, trip.Decription, trip.Location, trip.Start_date, trip.End_date, trip.Price, trip.Seats, trip.Available_seats, trip.ID,
-	).Scan()
+	).Scan(&trip.ID)
 
 	if err != nil {
 		return err

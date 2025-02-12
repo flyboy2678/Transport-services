@@ -21,12 +21,14 @@ type InvoiceStore struct {
 func (s *InvoiceStore) Create(ctx context.Context, invoice *Invoice) error {
 	query := `INSERT INTO invoice (payment_id, invoice_number, issue_at, due_date, status)
 	VALUES ($1, $2, $3, $4, $5)
-	RETURNING id, created_at
+	RETURNING id, issue_at
 	`
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status).Scan(&invoice.ID, &invoice.Issue_at)
+	err := s.db.QueryRowContext(
+		ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status,
+	).Scan(&invoice.ID, &invoice.Issue_at)
 	if err != nil {
 		return err
 	}

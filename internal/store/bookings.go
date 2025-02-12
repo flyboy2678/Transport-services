@@ -19,14 +19,15 @@ type BookingStore struct {
 
 func (s *BookingStore) Create(ctx context.Context, booking *Booking) error {
 	query := `INSERT INTO booking (user_id, trip_id, status)
-	VALUES ($1, $2, $3)`
+	VALUES ($1, $2, $3)
+	RETURNING id, created_at`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx, query, booking.User_id, booking.Trip_id, booking.Status,
-	).Scan()
+	).Scan(&booking.ID, &booking.Created_at)
 	if err != nil {
 		return err
 	}
@@ -116,12 +117,13 @@ func (s *BookingStore) GetByUserID(ctx context.Context, userID int64) ([]Booking
 }
 
 func (s *BookingStore) UpdateByID(ctx context.Context, booking *Booking) error {
-	query := `UPDATE booking SET status = $1 WHERE id = $2`
+	query := `UPDATE booking SET status = $1 WHERE id = $2 
+	RETURNING id`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, booking.Status, booking.ID).Scan()
+	err := s.db.QueryRowContext(ctx, query, booking.Status, booking.ID).Scan(&booking.ID)
 	if err != nil {
 		return err
 	}

@@ -113,14 +113,14 @@ func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error)
 }
 
 func (s *UserStore) UpdateByID(ctx context.Context, user *User) error {
-	query := `UPDATE "user" SET email = $1, phone = $2 WHERE id = $3`
+	query := `UPDATE "user" SET email = $1, phone = $2 WHERE id = $3 RETURNING id`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx, query, user.Email, user.Phone, user.ID,
-	).Scan()
+	).Scan(&user.ID)
 
 	if err != nil {
 		return err

@@ -87,7 +87,7 @@ func (s *PaymentStore) UpdateByID(ctx context.Context, payment *Payment) error {
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, payment.Status, payment.ID).Scan()
+	err := s.db.QueryRowContext(ctx, query, payment.Status, payment.ID).Scan(&payment.ID)
 	if err != nil {
 		return err
 	}
