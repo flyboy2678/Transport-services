@@ -116,12 +116,12 @@ func (s *BookingStore) GetByUserID(ctx context.Context, userID int64) ([]Booking
 }
 
 func (s *BookingStore) UpdateByID(ctx context.Context, booking *Booking) error {
-	query := `UPDATE booking SET user_id = $1, trip_id = $2, status = $3 WHERE id = $4`
+	query := `UPDATE booking SET status = $1 WHERE id = $2`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, booking.User_id, booking.Trip_id, booking.Status, booking.ID).Scan()
+	err := s.db.QueryRowContext(ctx, query, booking.Status, booking.ID).Scan()
 	if err != nil {
 		return err
 	}

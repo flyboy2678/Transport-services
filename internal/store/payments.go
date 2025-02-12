@@ -22,26 +22,72 @@ type PaymentStore struct {
 func (s *PaymentStore) Create(ctx context.Context, payment *Payment) error {
 	query := `INSERT INTO payment (booking_id, user_id, amount, status, transaction_id)
 	VALUES ($1, $2, $3, $4, $5)
+	RETURING id, created_at
 	`
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, payment.Booking_id, payment.User_id, payment.Amount, payment.Status, payment.Transaction_id).Scan()
+	err := s.db.QueryRowContext(
+		ctx, query, payment.Booking_id, payment.User_id, payment.Amount, payment.Status, payment.Transaction_id,
+	).Scan(
+		&payment.ID, &payment.Created_at,
+	)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
+func (s *PaymentStore) GetByUserID(ctx context.Context, userId int64) ([]Payment, error) {
+	query := `
+	SELECT id, booking_id, user_id, amount, status, transaction_id, created_at
+	FROM payment
+	WHERE user_id = $1
+	`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	rows, err := s.db.QueryContext(ctx, query, userId)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var payments []Payment
+
+	for rows.Next() {
+		var payment Payment
+		if err := rows.Scan(
+			payment.ID,
+			payment.Booking_id,
+			payment.User_id,
+			payment.Amount,
+			payment.Status,
+			payment.Transaction_id,
+			payment.Created_at,
+		); err != nil {
+			return nil, err
+		}
+
+		payments = append(payments, payment)
+
+	}
+
+	return payments, nil
+
+}
+
 func (s *PaymentStore) UpdateByID(ctx context.Context, payment *Payment) error {
 	query := `
-	UPDATE payment SET booking_id = $1, user_id = $2, amount = $3, status = $4, transaction_id = $5 
-	WHERE id = $6
+	UPDATE payment SET  status = $1
+	WHERE id = $2
+	RETURNING id
 	`
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, payment.Booking_id, payment.User_id, payment.Amount, payment.Status, payment.Transaction_id, payment.ID).Scan()
+	err := s.db.QueryRowContext(ctx, query, payment.Status, payment.ID).Scan()
 	if err != nil {
 		return err
 	}

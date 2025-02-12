@@ -77,6 +77,30 @@ func (app *application) mount() http.Handler {
 				r.Get("/", app.getUpcomingTripsHandler)
 			})
 		})
+		//bookings
+		r.Route("/bookings", func(r chi.Router) {
+			r.Post("/", app.createBookingHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getBookingByIdHandler)
+				r.Patch("/", app.UpdateBookingByIdHandler)
+			})
+			r.Route("/tripId/{id}", func(r chi.Router) {
+				r.Get("/", app.getBookingsByTripIdHandler)
+			})
+			r.Route("/userId/{id}", func(r chi.Router) {
+				r.Get("/", app.GetBookingByUserIdHandler)
+			})
+		})
+		//payments
+		r.Route("/payments", func(r chi.Router) {
+			r.Post("/", app.createPaymentHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Patch("/", app.updatePaymentByIdHandler)
+			})
+			r.Route("/userId/{id}", func(r chi.Router) {
+				r.Get("/", app.getPaymentsByUserIdHandler)
+			})
+		})
 		//subscriptions
 		r.Route("/subscriptions", func(r chi.Router) {
 			r.Post("/", app.createSubHandler)

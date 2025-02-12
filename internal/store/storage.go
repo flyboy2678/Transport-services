@@ -38,6 +38,7 @@ type Storage struct {
 	}
 	Payments interface {
 		Create(context.Context, *Payment) error
+		GetByUserID(context.Context, int64) ([]Payment, error)
 		UpdateByID(context.Context, *Payment) error
 	}
 	Subscriptions interface {
