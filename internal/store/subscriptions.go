@@ -17,12 +17,15 @@ type SubscriptionStore struct {
 }
 
 func (s *SubscriptionStore) Create(ctx context.Context, subscription *Subscription) error {
-	query := `INSERT INTO subscription (user_id, email) VALUES ($1, $2)`
+	query := `INSERT INTO subscription (user_id, email) VALUES ($1, $2)
+	RETURNING id, created_at`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, subscription.User_id, subscription.Email).Scan()
+	err := s.db.QueryRowContext(ctx, query, subscription.User_id, subscription.Email).Scan(
+		&subscription.ID, &subscription.Created_at,
+	)
 	if err != nil {
 		return err
 	}

@@ -21,11 +21,12 @@ type InvoiceStore struct {
 func (s *InvoiceStore) Create(ctx context.Context, invoice *Invoice) error {
 	query := `INSERT INTO invoice (payment_id, invoice_number, issue_at, due_date, status)
 	VALUES ($1, $2, $3, $4, $5)
+	RETURNING id, created_at
 	`
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status).Scan()
+	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status).Scan(&invoice.ID, &invoice.Issue_at)
 	if err != nil {
 		return err
 	}
@@ -33,12 +34,15 @@ func (s *InvoiceStore) Create(ctx context.Context, invoice *Invoice) error {
 }
 
 func (s *InvoiceStore) UpdateByInvoiceNumber(ctx context.Context, invoice *Invoice) error {
-	query := `UPDATE invoice SET payment_id = $1, invoice_number = $2, issue_at = $3, due_date = $4, status = $5 WHERE invoice_number = $6`
+	query := `UPDATE invoice 
+	SET status = $1 
+	WHERE invoice_number = $2
+	RETURNING id`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	err := s.db.QueryRowContext(ctx, query, invoice.Payment_id, invoice.Invoice_number, invoice.Issue_at, invoice.Due_date, invoice.Status, invoice.Invoice_number).Scan()
+	err := s.db.QueryRowContext(ctx, query, invoice.Status, invoice.Invoice_number).Scan(&invoice.ID)
 	if err != nil {
 		return err
 	}

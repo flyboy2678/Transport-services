@@ -1,5 +1,69 @@
 basePath: /v1
 definitions:
+  main.CreateBookingPayload:
+    properties:
+      status:
+        type: string
+      trip_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  main.CreateInvoicePayload:
+    properties:
+      due_date:
+        type: string
+      invoice_number:
+        type: string
+      payment_id:
+        type: integer
+      status:
+        type: string
+    required:
+    - due_date
+    - invoice_number
+    - payment_id
+    - status
+    type: object
+  main.CreatePaymentPayload:
+    properties:
+      amount:
+        type: number
+      booking_id:
+        type: integer
+      status:
+        type: string
+      transation_id:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - amount
+    - booking_id
+    - status
+    - transation_id
+    - user_id
+    type: object
+  main.CreatePhotoPayload:
+    properties:
+      photo_url:
+        type: string
+      trip_id:
+        type: integer
+    required:
+    - photo_url
+    - trip_id
+    type: object
+  main.CreateSubPayload:
+    properties:
+      email:
+        type: string
+      user_id:
+        type: integer
+    required:
+    - email
+    - user_id
+    type: object
   main.CreateTripPayload:
     properties:
       available_seats:
@@ -56,6 +120,103 @@ definitions:
     - password
     - phone
     type: object
+  main.UpdateBookingPayload:
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+    required:
+    - id
+    - status
+    type: object
+  main.UpdateInvoicePayload:
+    properties:
+      invoice_number:
+        type: string
+      status:
+        type: string
+    required:
+    - invoice_number
+    - status
+    type: object
+  main.UpdatePaymentPayload:
+    properties:
+      id:
+        type: integer
+      status:
+        type: string
+    required:
+    - id
+    - status
+    type: object
+  store.Booking:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      trip_id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
+  store.Invoice:
+    properties:
+      due_date:
+        type: string
+      id:
+        type: integer
+      invoice_number:
+        type: string
+      issue_at:
+        type: string
+      payment_id:
+        type: integer
+      status:
+        type: string
+    type: object
+  store.Payment:
+    properties:
+      amount:
+        type: number
+      booking_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      status:
+        type: string
+      transation_id:
+        type: string
+      user_id:
+        type: integer
+    type: object
+  store.Photo:
+    properties:
+      id:
+        type: integer
+      photo_url:
+        type: string
+      trip_id:
+        type: integer
+      uploaded_at:
+        type: string
+    type: object
+  store.Subscription:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      user_id:
+        type: integer
+    type: object
   store.Trip:
     properties:
       available_seats:
@@ -99,6 +260,591 @@ info:
   title: Transport Service Api
   version: "1.0"
 paths:
+  /booking/userId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches bookings by a user id
+      parameters:
+      - description: booking id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Booking'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches bookings
+      tags:
+      - bookings
+  /bookings:
+    post:
+      consumes:
+      - application/json
+      description: Creates a booking
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateBookingPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Booking'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a booking
+      tags:
+      - bookings
+  /bookings/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: fetches a booking by id
+      parameters:
+      - description: booking id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Booking'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: fetches a booking
+      tags:
+      - bookings
+    patch:
+      consumes:
+      - application/json
+      description: Updates a booking by ID
+      parameters:
+      - description: Booking ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdateBookingPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Booking'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Updates a booking
+      tags:
+      - bookings
+  /bookings/tripId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches bookings by id
+      parameters:
+      - description: booking id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Booking'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches bookings
+      tags:
+      - bookings
+  /invoice:
+    post:
+      consumes:
+      - application/json
+      description: Creates a invoice
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateInvoicePayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Invoice'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a invoice
+      tags:
+      - invoices
+  /invoice/invoiceNumber/{invoiceNumber}:
+    get:
+      consumes:
+      - application/json
+      description: fetches a invoice by invoice number
+      parameters:
+      - description: invoice number
+        in: path
+        name: invoiceNumber
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Invoice'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: fetches a invoice
+      tags:
+      - invoices
+    patch:
+      consumes:
+      - application/json
+      description: Updates a invoice by invoice number
+      parameters:
+      - description: invoice number
+        in: path
+        name: invoiceNumber
+        required: true
+        type: string
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdateInvoicePayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Invoice'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Updates a invoice
+      tags:
+      - invoices
+  /payments:
+    post:
+      consumes:
+      - application/json
+      description: Creates a payment
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreatePaymentPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Payment'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a payment
+      tags:
+      - payments
+  /payments/id/{id}:
+    patch:
+      consumes:
+      - application/json
+      description: Updates a payment by ID
+      parameters:
+      - description: Payment ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.UpdatePaymentPayload'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Payment'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Updates a payment
+      tags:
+      - payments
+  /payments/userId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches payments by a user id
+      parameters:
+      - description: payments id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Payment'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches payments
+      tags:
+      - payments
+  /photo:
+    post:
+      consumes:
+      - application/json
+      description: Creates a photo
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreatePhotoPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Photo'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a photo
+      tags:
+      - photos
+  /photos/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a photo by id
+      parameters:
+      - description: photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a photo
+      tags:
+      - photos
+    get:
+      consumes:
+      - application/json
+      description: Fetches a photo by id
+      parameters:
+      - description: Photo id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Photo'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a photo by id
+      tags:
+      - photos
+  /photos/tripId/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes photos by a trip id
+      parameters:
+      - description: Trip ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes photos
+      tags:
+      - photos
+    get:
+      consumes:
+      - application/json
+      description: Fetches photos by a trip id
+      parameters:
+      - description: Trip id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Photo'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches photos by a trip id
+      tags:
+      - photos
+  /subscriptions:
+    get:
+      consumes:
+      - application/json
+      description: Fetches all subscriptions
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Subscription'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches all subscriptions
+      tags:
+      - subscriptions
+    post:
+      consumes:
+      - application/json
+      description: Creates a subscription
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateSubPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Subscription'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a subscription
+      tags:
+      - subscriptions
+  /subscriptions/email/{email}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a subscription by email
+      parameters:
+      - description: Subscription email
+        in: path
+        name: email
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a subscription
+      tags:
+      - subscriptions
+  /subscriptions/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a subscription by id
+      parameters:
+      - description: Subscription ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a subscription
+      tags:
+      - subscriptions
   /trips:
     get:
       consumes:

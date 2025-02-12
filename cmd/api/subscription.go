@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-type CreateSubPaylaod struct {
+type CreateSubPayload struct {
 	UserID int64  `json:"user_id" validate:"required"`
 	Email  string `json:"email" validate:"required"`
 }
@@ -28,7 +28,7 @@ type CreateSubPaylaod struct {
 //	@Failure		500		{object}	error
 //	@Router			/subscriptions [post]
 func (app *application) createSubHandler(w http.ResponseWriter, r *http.Request) {
-	var payload CreateSubPaylaod
+	var payload CreateSubPayload
 
 	if err := readJSON(w, r, &payload); err != nil {
 		app.badRequestResponse(w, r, err)
@@ -67,7 +67,7 @@ func (app *application) createSubHandler(w http.ResponseWriter, r *http.Request)
 // @Accept json
 // @Produce json
 //
-//	@Success		200	{object}	store.Subscriptions
+//	@Success		200	{object}	store.Subscription
 //	@Failure		404	{object}	error
 //	@Failure		500	{object}	error
 //	@Router			/subscriptions [get]

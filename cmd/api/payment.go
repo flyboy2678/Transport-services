@@ -107,13 +107,13 @@ type UpdatePaymentPayload struct {
 //
 // @Summary		Updates a payment
 // @Description	Updates a payment by ID
-// @Tags			payment
+// @Tags			payments
 // @Accept			json
 // @Produce		json
 // @Param			id		path		int					true	"Payment ID"
 // @Param			payload	body		UpdatePaymentPayload	true	"Post payload"
 //
-//	@Success		200		{object}	store.Payload
+//	@Success		200		{object}	store.Payment
 //	@Failure		400		{object}	error
 //	@Failure		401		{object}	error
 //	@Failure		404		{object}	error

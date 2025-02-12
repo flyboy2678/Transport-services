@@ -101,6 +101,14 @@ func (app *application) mount() http.Handler {
 				r.Get("/", app.getPaymentsByUserIdHandler)
 			})
 		})
+		//invoices
+		r.Route("/invoices", func(r chi.Router) {
+			r.Post("/", app.createInvoiceHandler)
+			r.Route("/invoiceNumber/{invoiceNumber}", func(r chi.Router) {
+				r.Get("/", app.getInvoiceByInvoiceNumberHandler)
+				r.Patch("/", app.updateInvoiceByInvoiceNumberHandler)
+			})
+		})
 		//subscriptions
 		r.Route("/subscriptions", func(r chi.Router) {
 			r.Post("/", app.createSubHandler)

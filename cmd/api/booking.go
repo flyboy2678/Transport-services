@@ -60,19 +60,19 @@ func (app *application) createBookingHandler(w http.ResponseWriter, r *http.Requ
 	}
 }
 
-// GetBookingById godoc
+// getbookingbyid godoc
 //
-// @Summary Fetches a booking
-// @Description Fetches a booking by id
-// @Tags bookings
-// @Accept json
-// @Produce json
-// @Param id path int true "booking id"
+// @summary fetches a booking
+// @description fetches a booking by id
+// @tags bookings
+// @accept json
+// @produce json
+// @param id path int true "booking id"
 //
-//	@Success		200	{object}	store.Booking
-//	@Failure		404	{object}	error
-//	@Failure		500	{object}	error
-//	@Router			/bookings/id/{id} [get]
+//	@success		200	{object}	store.Booking
+//	@failure		404	{object}	error
+//	@failure		500	{object}	error
+//	@router			/bookings/id/{id} [get]
 func (app *application) getBookingByIdHandler(w http.ResponseWriter, r *http.Request) {
 	bookingId, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
