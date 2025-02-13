@@ -7,6 +7,7 @@ import (
 	"transportService/internal/store"
 
 	"github.com/go-chi/chi/v5"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CreateUserPayload struct {
@@ -43,11 +44,19 @@ func (app *application) createUserHandler(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	bytes, err := bcrypt.GenerateFromPassword([]byte(payload.Password), 10)
+	if err != nil {
+		app.internalServerError(w, r, err)
+		return
+	}
+
+	hashedPassword := string(bytes)
+
 	user := &store.User{
 		First_name: payload.First_name,
 		Last_name:  payload.Last_name,
 		Email:      payload.Email,
-		Password:   payload.Password,
+		Password:   hashedPassword,
 		Phone:      payload.Phone,
 	}
 
