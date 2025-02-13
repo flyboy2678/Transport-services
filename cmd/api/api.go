@@ -52,6 +52,13 @@ func (app *application) mount() http.Handler {
 		r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(docsURL)))
 		r.Get("/health", app.healthCheckHandler)
 		//route will display as v1/health
+		//auth
+		r.Route("/register", func(r chi.Router) {
+			r.Post("/", app.RegisterUserHandler)
+		})
+		r.Route("/login", func(r chi.Router) {
+			r.Post("/", app.logInHandler)
+		})
 		//users
 		r.Route("/users", func(r chi.Router) {
 			r.Post("/", app.createUserHandler)

@@ -11,7 +11,7 @@ var ErrDuplicateEmail = errors.New("a user with that email already exists")
 type User struct {
 	ID         int64  `json:"id"`
 	Email      string `json:"email"`
-	Password   string `json:"-"`
+	Password   string `json:"password"`
 	First_name string `json:"first_name"`
 	Last_name  string `json:"last_name"`
 	Phone      string `json:"phone"`
@@ -96,9 +96,9 @@ func (s *UserStore) GetByEmail(ctx context.Context, email string) (*User, error)
 	).Scan(
 		&user.ID,
 		&user.Email,
-		&user.Password,
 		&user.First_name,
 		&user.Last_name,
+		&user.Password,
 		&user.Phone,
 		&user.Created_at,
 	)
