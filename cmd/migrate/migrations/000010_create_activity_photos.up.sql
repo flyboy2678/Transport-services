@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS activity_photo (
+    id SERIAL PRIMARY KEY,
+    activity_id INT NOT NULL REFERENCES activity(id) ON DELETE CASCADE,
+    photo_url TEXT NOT NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)

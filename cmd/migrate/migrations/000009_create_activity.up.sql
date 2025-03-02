@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS activity (
+    id SERIAL PRIMARY KEY,
+    trip_id INT NOT NULL REFERENCES trip(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    decription TEXT,
+    price FLOAT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+)
