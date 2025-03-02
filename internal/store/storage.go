@@ -66,19 +66,49 @@ type Storage struct {
 		DeleteByID(context.Context, int64) error
 		DeleteByTripID(context.Context, int64) error
 	}
+	Accomodations interface {
+		Create(context.Context, *Accomodation) error
+		GetByID(context.Context, int64) (*Accomodation, error)
+		GetByTripID(context.Context, int64) ([]Accomodation, error)
+		UpdateByID(context.Context, *Accomodation) error
+	}
+	AccomodationPhotos interface {
+		Create(context.Context, *AccomodationPhoto) error
+		GetByAccomodationId(context.Context, int64) ([]AccomodationPhoto, error)
+		DeleteByID(context.Context, int64) error
+		DeleteByAccomodationId(context.Context, int64) error
+	}
+	Activities interface {
+		Create(context.Context, *Activity) error
+		GetById(context.Context, int64) (*Activity, error)
+		GetByTripId(context.Context, int64) ([]Activity, error)
+		UpdateById(context.Context, *Activity) error
+		DeleteById(context.Context, int64) error
+	}
+	ActivityPhotos interface {
+		Create(context.Context, *ActivityPhoto) error
+		GetById(context.Context, int64) (*ActivityPhoto, error)
+		GetByActivityId(context.Context, int64) ([]ActivityPhoto, error)
+		DeleteById(context.Context, int64) error
+		DeleteByActivityId(context.Context, int64) error
+	}
 	//add more interface like based on the tables we are
 	// on having in our database
 }
 
 func NewStorage(db *sql.DB) Storage {
 	return Storage{
-		Users:         &UserStore{db},
-		Trips:         &TripStore{db},
-		Bookings:      &BookingStore{db},
-		Payments:      &PaymentStore{db},
-		Subscriptions: &SubscriptionStore{db},
-		Invoices:      &InvoiceStore{db},
-		Comments:      &CommentStore{db},
-		Photos:        &PhotoStore{db},
+		Users:              &UserStore{db},
+		Trips:              &TripStore{db},
+		Bookings:           &BookingStore{db},
+		Payments:           &PaymentStore{db},
+		Subscriptions:      &SubscriptionStore{db},
+		Invoices:           &InvoiceStore{db},
+		Comments:           &CommentStore{db},
+		Photos:             &PhotoStore{db},
+		Accomodations:      &AccomodationStore{db},
+		AccomodationPhotos: &AccomodationPhotoStore{db},
+		Activities:         &ActivityStore{db},
+		ActivityPhotos:     &ActivityPhotoStore{db},
 	}
 }

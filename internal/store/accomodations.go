@@ -75,7 +75,7 @@ func (s *AccomodationStore) GetByID(ctx context.Context, accomodation_id int64) 
 	return accomodation, nil
 }
 
-func (s *AccomodationStore) GetByTrip(ctx context.Context, trip_id int64) ([]Accomodation, error) {
+func (s *AccomodationStore) GetByTripID(ctx context.Context, trip_id int64) ([]Accomodation, error) {
 	query := `SELECET id, trip_id, name, description, price_per_night, created_at 
 	FROM accomodation 
 	WHERE trip_id = $1`
@@ -109,7 +109,7 @@ func (s *AccomodationStore) GetByTrip(ctx context.Context, trip_id int64) ([]Acc
 	return accomodations, nil
 }
 
-func (s *AccomodationStore) UpdateByID(ctx context.Context, accomodation Accomodation) error {
+func (s *AccomodationStore) UpdateByID(ctx context.Context, accomodation *Accomodation) error {
 	query := `UPDATE accomodation SET name = $1, description = $2, price_per_night = $3
 	WHERE id = $4
 	RETURNING id`

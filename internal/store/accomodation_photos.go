@@ -9,7 +9,7 @@ type AccomodationPhoto struct {
 	ID              int64  `json:"id"`
 	Accomodation_id int64  `json:"accomodation_id"`
 	Photo_url       string `json:"photo_url"`
-	Uploaded_at     string `json:"uploaded_at"`
+	Created_at      string `json:"created_at"`
 }
 
 type AccomodationPhotoStore struct {
@@ -18,14 +18,14 @@ type AccomodationPhotoStore struct {
 
 func (s *AccomodationPhotoStore) Create(ctx context.Context, accomodationPhoto *AccomodationPhoto) error {
 	query := `INSERT INTO accomodation_photo (accomodation_id, photo_url)
-	RETURNING id, uploaded_at`
+	RETURNING id, created_at`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
 	err := s.db.QueryRowContext(
 		ctx, query, accomodationPhoto.Accomodation_id, accomodationPhoto.Photo_url,
-	).Scan(&accomodationPhoto.ID, &accomodationPhoto.Uploaded_at)
+	).Scan(&accomodationPhoto.ID, &accomodationPhoto.Created_at)
 
 	if err != nil {
 		return err
@@ -33,14 +33,15 @@ func (s *AccomodationPhotoStore) Create(ctx context.Context, accomodationPhoto *
 	return nil
 }
 
-func (s *AccomodationPhotoStore) GetAll(ctx context.Context) ([]AccomodationPhoto, error) {
-	query := `SELECT id, accomodation_id, photo_url, uploaded_at
-	FROM accomodation_photo`
+func (s *AccomodationPhotoStore) GetByAccomodationId(ctx context.Context, accomodation_id int64) ([]AccomodationPhoto, error) {
+	query := `SELECT id, accomodation_id, photo_url, created_at
+	FROM accomodation_photo
+	WHERE accomodation_id = $1`
 
 	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
 	defer cancel()
 
-	rows, err := s.db.QueryContext(ctx, query)
+	rows, err := s.db.QueryContext(ctx, query, accomodation_id)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +52,7 @@ func (s *AccomodationPhotoStore) GetAll(ctx context.Context) ([]AccomodationPhot
 		var photo AccomodationPhoto
 		if err := rows.Scan(photo.ID,
 			photo.Photo_url,
-			photo.Uploaded_at); err != nil {
+			photo.Created_at); err != nil {
 			return nil, err
 		}
 		photos = append(photos, photo)
