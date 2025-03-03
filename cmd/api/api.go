@@ -89,13 +89,13 @@ func (app *application) mount() http.Handler {
 			r.Post("/", app.createBookingHandler)
 			r.Route("/id/{id}", func(r chi.Router) {
 				r.Get("/", app.getBookingByIdHandler)
-				r.Patch("/", app.UpdateBookingByIdHandler)
+				r.Patch("/", app.updateBookingByIdHandler)
 			})
 			r.Route("/tripId/{id}", func(r chi.Router) {
 				r.Get("/", app.getBookingsByTripIdHandler)
 			})
 			r.Route("/userId/{id}", func(r chi.Router) {
-				r.Get("/", app.GetBookingByUserIdHandler)
+				r.Get("/", app.getBookingByUserIdHandler)
 			})
 		})
 		//payments
@@ -151,6 +151,10 @@ func (app *application) mount() http.Handler {
 				r.Delete("/", app.deleteCommentByTripIdHandler)
 			})
 		})
+		//accomodations
+		//accomodation photos
+		//activities
+		//activity photos
 	})
 	router.Get("/health", app.healthCheckHandler)
 

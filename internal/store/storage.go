@@ -74,6 +74,7 @@ type Storage struct {
 	}
 	AccomodationPhotos interface {
 		Create(context.Context, *AccomodationPhoto) error
+		GetById(context.Context, int64) (*AccomodationPhoto, error)
 		GetByAccomodationId(context.Context, int64) ([]AccomodationPhoto, error)
 		DeleteByID(context.Context, int64) error
 		DeleteByAccomodationId(context.Context, int64) error

@@ -141,7 +141,7 @@ func (app *application) getBookingsByTripIdHandler(w http.ResponseWriter, r *htt
 //	@Failure		404	{object}	error
 //	@Failure		500	{object}	error
 //	@Router			/booking/userId/{id} [get]
-func (app *application) GetBookingByUserIdHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) getBookingByUserIdHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
 		app.badRequestResponse(w, r, err)
@@ -183,7 +183,7 @@ type UpdateBookingPayload struct {
 //	@Failure		404		{object}	error
 //	@Failure		500		{object}	error
 //	@Router			/bookings/id/{id} [patch]
-func (app *application) UpdateBookingByIdHandler(w http.ResponseWriter, r *http.Request) {
+func (app *application) updateBookingByIdHandler(w http.ResponseWriter, r *http.Request) {
 	var payload UpdateBookingPayload
 
 	if err := readJSON(w, r, &payload); err != nil {

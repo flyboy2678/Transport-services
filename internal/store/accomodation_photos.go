@@ -33,6 +33,31 @@ func (s *AccomodationPhotoStore) Create(ctx context.Context, accomodationPhoto *
 	return nil
 }
 
+func (s *AccomodationPhotoStore) GetById(ctx context.Context, id int64) (*AccomodationPhoto, error) {
+	query := `SELECT id, accomodation_id, photo_url, created_at
+	FROM accomodation_photo
+	WHERE id = $1`
+
+	ctx, cancel := context.WithTimeout(ctx, QueryTimeoutDuration)
+	defer cancel()
+
+	photo := &AccomodationPhoto{}
+	err := s.db.QueryRowContext(ctx, query, id).Scan(
+		&photo.ID,
+		&photo.Accomodation_id,
+		&photo.Photo_url,
+		&photo.Created_at,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, ErrNotFound
+		}
+		return nil, err
+	}
+
+	return photo, nil
+}
+
 func (s *AccomodationPhotoStore) GetByAccomodationId(ctx context.Context, accomodation_id int64) ([]AccomodationPhoto, error) {
 	query := `SELECT id, accomodation_id, photo_url, created_at
 	FROM accomodation_photo
