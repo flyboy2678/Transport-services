@@ -15,6 +15,20 @@ type CreateActivityPayload struct {
 	Price       float64 `json:"price" validate:"required"`
 }
 
+// CreateActvity godoc
+//
+// @Summary Creates a activity
+// @Description Creates a activity
+// @Tags activities
+// @Accept json
+// @Produce json
+// @Param payload body	 CreateActivityPayload		true	"Post payload"
+//
+//	@Success		202		{object}	store.Activity
+//	@Failure		400		{object}	error
+//	@Failure		401		{object}	error
+//	@Failure		500		{object}	error
+//	@Router			/activity [post]
 func (app *application) createActivityHandler(w http.ResponseWriter, r *http.Request) {
 	var payload CreateActivityPayload
 
@@ -48,6 +62,19 @@ func (app *application) createActivityHandler(w http.ResponseWriter, r *http.Req
 	}
 }
 
+// GetActivityBygodoc
+//
+// @Summary Fetches a activity by id
+// @Description Fetches a activity by id
+// @Tags activities
+// @Accept json
+// @Produce json
+// @Param id path int true "Activity id"
+//
+//	@Success		200	{object}	store.Activity
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/activities/id/{id} [get]
 func (app *application) getActivityByIdHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
@@ -69,6 +96,19 @@ func (app *application) getActivityByIdHandler(w http.ResponseWriter, r *http.Re
 	}
 }
 
+// GetActivitiesByTripId godoc
+//
+// @Summary Fetches activities by a trip id
+// @Description Fetches activities by a trip id
+// @Tags activities
+// @Accept json
+// @Produce json
+// @Param id path int true "Trip id"
+//
+//	@Success		200	{object}	store.Activity
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/activities/tripId/{id} [get]
 func (app *application) getActivityByTripIdHandler(w http.ResponseWriter, r *http.Request) {
 	tripId, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {

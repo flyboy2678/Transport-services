@@ -15,6 +15,20 @@ type CreateAccomodationPayload struct {
 	Price_per_night float64 `json:"price_per_night" validate:"required"`
 }
 
+// CreateAccomodation godoc
+//
+// @Summary Creates a accomodation
+// @Description Creates a accomodation
+// @Tags accomodations
+// @Accept json
+// @Produce json
+// @Param payload body	 CreateAccomodationPayload		true	"Post payload"
+//
+//	@Success		202		{object}	store.Accomodation
+//	@Failure		400		{object}	error
+//	@Failure		401		{object}	error
+//	@Failure		500		{object}	error
+//	@Router			/accomodations [post]
 func (app *application) createAccomodationHandler(w http.ResponseWriter, r *http.Request) {
 	var payload CreateAccomodationPayload
 
@@ -31,7 +45,7 @@ func (app *application) createAccomodationHandler(w http.ResponseWriter, r *http
 	accomodation := &store.Accomodation{
 		Trip_id:         payload.Trip_id,
 		Name:            payload.Name,
-		Decription:      payload.Description,
+		Description:     payload.Description,
 		Price_per_night: payload.Price_per_night,
 	}
 
@@ -48,6 +62,19 @@ func (app *application) createAccomodationHandler(w http.ResponseWriter, r *http
 	}
 }
 
+// GetActivityBygodoc
+//
+// @Summary Fetches a accomodation by id
+// @Description Fetches a accomodation by id
+// @Tags accomodations
+// @Accept json
+// @Produce json
+// @Param id path int true "Accomodation id"
+//
+//	@Success		200	{object}	store.Accomodation
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/accomodations/id/{id} [get]
 func (app *application) getAccomodationByIdHandler(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
@@ -69,6 +96,19 @@ func (app *application) getAccomodationByIdHandler(w http.ResponseWriter, r *htt
 	}
 }
 
+// GetAccomodationById godoc
+//
+// @Summary Fetches accomodation by a trip id
+// @Description Fetches accomodation by a trip id
+// @Tags accomodations
+// @Accept json
+// @Produce json
+// @Param id path int true "Trip id"
+//
+//	@Success		200	{object}	store.Accomodation
+//	@Failure		404	{object}	error
+//	@Failure		500	{object}	error
+//	@Router			/accomodations/tripId/{id} [get]
 func (app *application) getAccomodationByTripIdHandler(w http.ResponseWriter, r *http.Request) {
 	tripId, err := strconv.ParseInt(chi.URLParam(r, "id"), 10, 64)
 	if err != nil {
@@ -113,7 +153,7 @@ func (app *application) updateAccomodationByID(w http.ResponseWriter, r *http.Re
 	accomodation := &store.Accomodation{
 		ID:              payload.ID,
 		Name:            payload.Name,
-		Decription:      payload.Description,
+		Description:     payload.Description,
 		Price_per_night: payload.Price_per_night,
 	}
 

@@ -7,6 +7,668 @@
     },
     "basePath": "/v1",
     "paths": {
+        "/accomodationPhotos": {
+            "post": {
+                "description": "Creates a photo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodationPhotos"
+                ],
+                "summary": "Creates a photo",
+                "parameters": [
+                    {
+                        "description": "Post payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CreateAccomodationPhotoPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/store.AccomodationPhoto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodationPhotos/accomodation/{id}": {
+            "get": {
+                "description": "Fetches photo by a trip id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodationPhotos"
+                ],
+                "summary": "Fetches photo by a trip id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Accomodation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.AccomodationPhoto"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodationPhotos/accomodationId/{id}": {
+            "delete": {
+                "description": "Deletes photos by a accomodation id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodationPhotos"
+                ],
+                "summary": "Deletes photos",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "accomodation ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodationPhotos/id/{id}": {
+            "get": {
+                "description": "Fetches a photo by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodationPhotos"
+                ],
+                "summary": "Fetches a photo by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "photo id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.AccomodationPhoto"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes a photo by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodationPhotos"
+                ],
+                "summary": "Deletes a photo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "photo ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodations": {
+            "post": {
+                "description": "Creates a accomodation",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodations"
+                ],
+                "summary": "Creates a accomodation",
+                "parameters": [
+                    {
+                        "description": "Post payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CreateAccomodationPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/store.Accomodation"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodations/id/{id}": {
+            "get": {
+                "description": "Fetches a accomodation by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodations"
+                ],
+                "summary": "Fetches a accomodation by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Accomodation id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Accomodation"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/accomodations/tripId/{id}": {
+            "get": {
+                "description": "Fetches accomodation by a trip id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "accomodations"
+                ],
+                "summary": "Fetches accomodation by a trip id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Trip id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Accomodation"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activities/id/{id}": {
+            "get": {
+                "description": "Fetches a activity by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Fetches a activity by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Activity id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Activity"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activities/tripId/{id}": {
+            "get": {
+                "description": "Fetches activities by a trip id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Fetches activities by a trip id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Trip id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.Activity"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activity": {
+            "post": {
+                "description": "Creates a activity",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activities"
+                ],
+                "summary": "Creates a activity",
+                "parameters": [
+                    {
+                        "description": "Post payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CreateActivityPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/store.Activity"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activityPhotos": {
+            "post": {
+                "description": "Creates a activity photo",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activityPhotos"
+                ],
+                "summary": "Creates a activity photo",
+                "parameters": [
+                    {
+                        "description": "Post payload",
+                        "name": "payload",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.CreateActivityPhotoPayload"
+                        }
+                    }
+                ],
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/store.ActivityPhoto"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {}
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activityPhotos/activity/{id}": {
+            "delete": {
+                "description": "Deletes photos by a trip id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activityPhotos"
+                ],
+                "summary": "Deletes photos",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "activity ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activityPhotos/id/{id}": {
+            "get": {
+                "description": "Fetches a activity by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activityPhotos"
+                ],
+                "summary": "Fetches a activity by id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Activity photo id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.ActivityPhoto"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activityPhotos/tripId/{id}": {
+            "get": {
+                "description": "Fetches activityPhotos by a trip id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activityPhotos"
+                ],
+                "summary": "Fetches activityPhotos by a trip id",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Activity id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/store.ActivityPhoto"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
+        "/activityPhotots/id/{id}": {
+            "delete": {
+                "description": "Deletes a photo by id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "activityPhotos"
+                ],
+                "summary": "Deletes a photo",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "photo ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {}
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {}
+                    }
+                }
+            }
+        },
         "/booking/userId/{id}": {
             "get": {
                 "description": "Fetches bookings by a user id",
@@ -1506,6 +2168,82 @@
         }
     },
     "definitions": {
+        "main.CreateAccomodationPayload": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "price_per_night",
+                "trip_id"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price_per_night": {
+                    "type": "number"
+                },
+                "trip_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "main.CreateAccomodationPhotoPayload": {
+            "type": "object",
+            "required": [
+                "accomodation_id",
+                "photo_url"
+            ],
+            "properties": {
+                "accomodation_id": {
+                    "type": "integer"
+                },
+                "photo_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.CreateActivityPayload": {
+            "type": "object",
+            "required": [
+                "description",
+                "name",
+                "price",
+                "trip_id"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "trip_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "main.CreateActivityPhotoPayload": {
+            "type": "object",
+            "required": [
+                "accomodation_id",
+                "photo_url"
+            ],
+            "properties": {
+                "accomodation_id": {
+                    "type": "integer"
+                },
+                "photo_url": {
+                    "type": "string"
+                }
+            }
+        },
         "main.CreateBookingPayload": {
             "type": "object",
             "properties": {
@@ -1790,6 +2528,86 @@
                     "type": "integer"
                 },
                 "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "store.Accomodation": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price_per_night": {
+                    "type": "number"
+                },
+                "trip_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "store.AccomodationPhoto": {
+            "type": "object",
+            "properties": {
+                "accomodation_id": {
+                    "type": "integer"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "photo_url": {
+                    "type": "string"
+                }
+            }
+        },
+        "store.Activity": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                },
+                "trip_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "store.ActivityPhoto": {
+            "type": "object",
+            "properties": {
+                "activity_id": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "photo_url": {
+                    "type": "string"
+                },
+                "uploaded_at": {
                     "type": "string"
                 }
             }

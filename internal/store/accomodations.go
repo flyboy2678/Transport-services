@@ -9,7 +9,7 @@ type Accomodation struct {
 	ID              int64   `json:"id"`
 	Trip_id         int64   `json:"trip_id"`
 	Name            string  `json:"name"`
-	Decription      string  `json:"description"`
+	Description     string  `json:"description"`
 	Price_per_night float64 `json:"price_per_night"`
 	Created_at      string  `json:"created_at"`
 }
@@ -32,7 +32,7 @@ func (s *AccomodationStore) Create(ctx context.Context, accomodation *Accomodati
 		ctx,
 		query,
 		accomodation.Name,
-		accomodation.Decription,
+		accomodation.Description,
 		accomodation.Price_per_night,
 	).Scan(
 		&accomodation.ID,
@@ -61,7 +61,7 @@ func (s *AccomodationStore) GetByID(ctx context.Context, accomodation_id int64) 
 		&accomodation.ID,
 		&accomodation.Trip_id,
 		&accomodation.Name,
-		&accomodation.Decription,
+		&accomodation.Description,
 		&accomodation.Price_per_night,
 		&accomodation.Created_at,
 	)
@@ -97,7 +97,7 @@ func (s *AccomodationStore) GetByTripID(ctx context.Context, trip_id int64) ([]A
 			&accomodation.ID,
 			&accomodation.Trip_id,
 			&accomodation.Name,
-			&accomodation.Decription,
+			&accomodation.Description,
 			&accomodation.Price_per_night,
 			&accomodation.Created_at,
 		); err != nil {
@@ -118,7 +118,7 @@ func (s *AccomodationStore) UpdateByID(ctx context.Context, accomodation *Accomo
 	defer cancel()
 
 	err := s.db.QueryRowContext(
-		ctx, query, accomodation.Name, accomodation.Decription, accomodation.Price_per_night, accomodation.ID,
+		ctx, query, accomodation.Name, accomodation.Description, accomodation.Price_per_night, accomodation.ID,
 	).Scan(&accomodation.ID)
 
 	if err != nil {

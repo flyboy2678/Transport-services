@@ -152,9 +152,51 @@ func (app *application) mount() http.Handler {
 			})
 		})
 		//accomodations
+		r.Route("/accomodations", func(r chi.Router) {
+			r.Post("/", app.createAccomodationHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getAccomodationByIdHandler)
+				r.Patch("/", app.updateAccomodationByID)
+			})
+			r.Route("/tripId/{id}", func(r chi.Router) {
+				r.Get("/", app.getAccomodationByTripIdHandler)
+			})
+		})
 		//accomodation photos
+		r.Route("/accomodationPhotos", func(r chi.Router) {
+			r.Post("/", app.createAccomodationPhotoHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getAccomodationPhotoById)
+				r.Delete("/", app.deleteAccomodationPhotoById)
+			})
+			r.Route("/accomodationId/{id}", func(r chi.Router) {
+				r.Get("/", app.getAccomodationPhotoByAccomodationId)
+				r.Delete("/", app.deleteAccomodationPhotoByAccomodationId)
+			})
+		})
 		//activities
+		r.Route("/activity", func(r chi.Router) {
+			r.Post("/", app.createActivityHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getActivityByIdHandler)
+				r.Patch("/", app.updateActivityByID)
+			})
+			r.Route("/tripId/{id}", func(r chi.Router) {
+				r.Get("/", app.getActivityByTripIdHandler)
+			})
+		})
 		//activity photos
+		r.Route("/activityPhotos", func(r chi.Router) {
+			r.Post("/", app.createActivityHandler)
+			r.Route("/id/{id}", func(r chi.Router) {
+				r.Get("/", app.getActivityByIdHandler)
+				r.Delete("/", app.deleteActivityPhotoById)
+			})
+			r.Route("/activityId/{id}", func(r chi.Router) {
+				r.Get("/", app.getActivityPhotoByActivityId)
+				r.Delete("/", app.deleteActivityPhotoByActivityId)
+			})
+		})
 	})
 	router.Get("/health", app.healthCheckHandler)
 

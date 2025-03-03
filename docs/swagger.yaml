@@ -1,5 +1,57 @@
 basePath: /v1
 definitions:
+  main.CreateAccomodationPayload:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price_per_night:
+        type: number
+      trip_id:
+        type: integer
+    required:
+    - description
+    - name
+    - price_per_night
+    - trip_id
+    type: object
+  main.CreateAccomodationPhotoPayload:
+    properties:
+      accomodation_id:
+        type: integer
+      photo_url:
+        type: string
+    required:
+    - accomodation_id
+    - photo_url
+    type: object
+  main.CreateActivityPayload:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+      trip_id:
+        type: integer
+    required:
+    - description
+    - name
+    - price
+    - trip_id
+    type: object
+  main.CreateActivityPhotoPayload:
+    properties:
+      accomodation_id:
+        type: integer
+      photo_url:
+        type: string
+    required:
+    - accomodation_id
+    - photo_url
+    type: object
   main.CreateBookingPayload:
     properties:
       status:
@@ -204,6 +256,58 @@ definitions:
     - id
     - status
     type: object
+  store.Accomodation:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price_per_night:
+        type: number
+      trip_id:
+        type: integer
+    type: object
+  store.AccomodationPhoto:
+    properties:
+      accomodation_id:
+        type: integer
+      created_at:
+        type: string
+      id:
+        type: integer
+      photo_url:
+        type: string
+    type: object
+  store.Activity:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+      trip_id:
+        type: integer
+    type: object
+  store.ActivityPhoto:
+    properties:
+      activity_id:
+        type: integer
+      id:
+        type: integer
+      photo_url:
+        type: string
+      uploaded_at:
+        type: string
+    type: object
   store.Booking:
     properties:
       created_at:
@@ -331,6 +435,453 @@ info:
   title: Transport Service Api
   version: "1.0"
 paths:
+  /accomodationPhotos:
+    post:
+      consumes:
+      - application/json
+      description: Creates a photo
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateAccomodationPhotoPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.AccomodationPhoto'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a photo
+      tags:
+      - accomodationPhotos
+  /accomodationPhotos/accomodation/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches photo by a trip id
+      parameters:
+      - description: Accomodation id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.AccomodationPhoto'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches photo by a trip id
+      tags:
+      - accomodationPhotos
+  /accomodationPhotos/accomodationId/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes photos by a accomodation id
+      parameters:
+      - description: accomodation ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes photos
+      tags:
+      - accomodationPhotos
+  /accomodationPhotos/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a photo by id
+      parameters:
+      - description: photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a photo
+      tags:
+      - accomodationPhotos
+    get:
+      consumes:
+      - application/json
+      description: Fetches a photo by id
+      parameters:
+      - description: photo id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.AccomodationPhoto'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a photo by id
+      tags:
+      - accomodationPhotos
+  /accomodations:
+    post:
+      consumes:
+      - application/json
+      description: Creates a accomodation
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateAccomodationPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Accomodation'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a accomodation
+      tags:
+      - accomodations
+  /accomodations/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a accomodation by id
+      parameters:
+      - description: Accomodation id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Accomodation'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a accomodation by id
+      tags:
+      - accomodations
+  /accomodations/tripId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches accomodation by a trip id
+      parameters:
+      - description: Trip id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Accomodation'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches accomodation by a trip id
+      tags:
+      - accomodations
+  /activities/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a activity by id
+      parameters:
+      - description: Activity id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Activity'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a activity by id
+      tags:
+      - activities
+  /activities/tripId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches activities by a trip id
+      parameters:
+      - description: Trip id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.Activity'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches activities by a trip id
+      tags:
+      - activities
+  /activity:
+    post:
+      consumes:
+      - application/json
+      description: Creates a activity
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateActivityPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.Activity'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a activity
+      tags:
+      - activities
+  /activityPhotos:
+    post:
+      consumes:
+      - application/json
+      description: Creates a activity photo
+      parameters:
+      - description: Post payload
+        in: body
+        name: payload
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateActivityPhotoPayload'
+      produces:
+      - application/json
+      responses:
+        "202":
+          description: Accepted
+          schema:
+            $ref: '#/definitions/store.ActivityPhoto'
+        "400":
+          description: Bad Request
+          schema: {}
+        "401":
+          description: Unauthorized
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Creates a activity photo
+      tags:
+      - activityPhotos
+  /activityPhotos/activity/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes photos by a trip id
+      parameters:
+      - description: activity ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes photos
+      tags:
+      - activityPhotos
+  /activityPhotos/id/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches a activity by id
+      parameters:
+      - description: Activity photo id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.ActivityPhoto'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches a activity by id
+      tags:
+      - activityPhotos
+  /activityPhotos/tripId/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Fetches activityPhotos by a trip id
+      parameters:
+      - description: Activity id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/store.ActivityPhoto'
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Fetches activityPhotos by a trip id
+      tags:
+      - activityPhotos
+  /activityPhotots/id/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Deletes a photo by id
+      parameters:
+      - description: photo ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema: {}
+        "500":
+          description: Internal Server Error
+          schema: {}
+      summary: Deletes a photo
+      tags:
+      - activityPhotos
   /booking/userId/{id}:
     get:
       consumes:
